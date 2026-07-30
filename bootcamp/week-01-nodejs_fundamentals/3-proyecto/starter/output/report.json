@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-07-30T01:10:02.165Z",
+  "appliedFilter": "flor",
+  "summary": {
+    "total": 3,
+    "active": 1,
+    "inactive": 2,
+    "averagePrice": 15666.67,
+    "mostExpensive": {
+      "id": "p006",
+      "name": "Lavanda",
+      "category": "flor",
+      "price": 20000,
+      "stock": 12,
+      "active": false
+    },
+    "cheapest": {
+      "id": "p010",
+      "name": "Girasol",
+      "category": "flor",
+      "price": 12000,
+      "stock": 30,
+      "active": false
+    },
+    "categories": [
+      "flor"
+    ]
+  },
+  "items": [
+    {
+      "id": "p001",
+      "name": "Rosa",
+      "category": "flor",
+      "price": 15000,
+      "stock": 20,
+      "active": true
+    },
+    {
+      "id": "p006",
+      "name": "Lavanda",
+      "category": "flor",
+      "price": 20000,
+      "stock": 12,
+      "active": false
+    },
+    {
+      "id": "p010",
+      "name": "Girasol",
+      "category": "flor",
+      "price": 12000,
+      "stock": 30,
+      "active": false
+    }
+  ]
+}

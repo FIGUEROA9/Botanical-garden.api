@@ -2,13 +2,13 @@
 // ENTRY POINT — Orquesta todo el flujo
 // ============================================
 
-import { readItems } from './reader.js';
+import { readPlants } from './reader.js';
 import { filterByCategory, calculateSummary } from './processor.js';
 import { writeReport } from './writer.js';
 import type { Report } from './types.js';
 
 // TODO: Parsear el argumento --category desde process.argv
-// process.argv = ['node', 'script.ts', '--category', 'electronics']
+// process.argv = ['node', 'script.ts', '--category', 'flor']
 // Si '--category' está en los args, el siguiente elemento es el valor.
 // Si no está, el filtro debe ser null.
 //
@@ -17,19 +17,63 @@ import type { Report } from './types.js';
 // const categoryIndex = args.indexOf('--category');
 // const categoryFilter: string | null = categoryIndex !== -1 ? args[categoryIndex + 1] : null;
 
-// TODO: Implementar la función main con el siguiente flujo:
-// 1. Parsear los argumentos (ver arriba)
-// 2. Leer los datos con readItems()
-// 3. Filtrar con filterByCategory() pasando el filtro parseado
-// 4. Calcular el resumen con calculateSummary()
-// 5. Construir el objeto Report con: generatedAt (ISO string), appliedFilter, summary, items filtrados
-// 6. Imprimir el resumen en consola (total, activos, precio promedio, categorías)
-// 7. Escribir el reporte en disco con writeReport()
-//
-// Recuerda manejar errores con try/catch y llamar process.exit(1) si algo falla.
-//
-// Firma esperada:
-// async function main(): Promise<void>
+async function main(): Promise<void> {
+  try {
+    const args = process.argv.slice(2);
+    const categoryIndex = args.indexOf('--category');
+
+    const categoryFilter: string | null =
+      categoryIndex !== -1 ? args[categoryIndex + 1] : null;
+
+    // Leer plantas desde el archivo JSON
+    const plants = await readPlants();
+
+    // Filtrar plantas por categoría
+    const filteredPlants = filterByCategory(
+      plants,
+      categoryFilter
+    );
+
+    // Calcular resumen del catálogo
+    const summary = calculateSummary(filteredPlants);
+
+    // Construir reporte final
+    const report: Report = {
+      generatedAt: new Date().toISOString(),
+      appliedFilter: categoryFilter,
+      summary,
+      items: filteredPlants,
+    };
+
+    // Mostrar resumen en consola
+    console.log('\n===== JARDÍN BOTÁNICO =====');
+    console.log(`Total plantas: ${summary.total}`);
+    console.log(`Plantas activas: ${summary.active}`);
+    console.log(`Plantas inactivas: ${summary.inactive}`);
+    console.log(`Precio promedio: ${summary.averagePrice}`);
+    console.log(
+      `Categorías: ${summary.categories.join(', ')}`
+    );
+
+    console.log(
+      `Planta más cara: ${summary.mostExpensive.name} - ${summary.mostExpensive.price}`
+    );
+
+    console.log(
+      `Planta más económica: ${summary.cheapest.name} - ${summary.cheapest.price}`
+    );
+
+    // Escribir reporte
+    await writeReport(report);
+
+  } catch (error) {
+    console.error(
+      error instanceof Error ? error.message : error
+    );
+
+    process.exit(1);
+  }
+}
 
 // TODO: Llamar main() al final del archivo
-// main();
+main();

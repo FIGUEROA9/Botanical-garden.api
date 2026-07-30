@@ -18,3 +18,16 @@ import type { Report } from './types.js';
 // export async function writeReport(report: Report): Promise<void>
 //
 // Nota: mkdir con { recursive: true } no lanza error si el directorio ya existe
+
+export async function writeReport(report: Report): Promise<void> {
+  const outputDir = join(import.meta.dirname, '..', 'output');
+  const outputFile = join(outputDir, 'report.json');
+
+  await mkdir(outputDir, { recursive: true });
+
+  const json = JSON.stringify(report, null, 2);
+
+  await writeFile(outputFile, json, 'utf-8');
+
+  console.log(`Reporte guardado en: ${outputFile}`);
+}

@@ -4,8 +4,10 @@
 // Renombra 'Item' al recurso de tu dominio asignado.
 // Ejemplo: Book, Medicine, Member, Dish, Room...
 
-// TODO: Renombrar 'Item' al recurso de tu dominio asignado
-export interface Item {
+// Dominio asignado: Jardín Botánico
+// Recurso principal: Plant
+
+export interface Plant {
   id: string;
   name: string;
   category: string;
@@ -26,13 +28,13 @@ export interface Item {
 // }
 
 // Resumen que el procesador debe calcular
-export interface ItemSummary {
+export interface PlantSummary {
   total: number;
   active: number;
   inactive: number;
   averagePrice: number;
-  mostExpensive: Item;
-  cheapest: Item;
+  mostExpensive: Plant;
+  cheapest: Plant;
   categories: string[];
 }
 
@@ -40,6 +42,6 @@ export interface ItemSummary {
 export interface Report {
   generatedAt: string;
   appliedFilter: string | null;
-  summary: ItemSummary;
-  items: Item[];
+  summary: PlantSummary;
+  items: Plant[];
 }

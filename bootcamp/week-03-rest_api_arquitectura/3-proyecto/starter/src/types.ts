@@ -43,6 +43,7 @@ export interface ErrorResponse {
   message: string;
 }
 
+//interface
 export interface PaginationParams {
   page: number;
   limit: number;

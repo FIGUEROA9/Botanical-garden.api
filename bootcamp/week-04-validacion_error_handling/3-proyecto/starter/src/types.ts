@@ -1,19 +1,19 @@
 // ============================================
-// TYPES — adapta Item al recurso de tu dominio
-// Ejemplo: Book, Medicine, Member, Dish, etc.
+// TYPES — Tree (Árbol)
+// Dominio: Jardín Botánico
 // ============================================
 
-// TODO: renombra Item y sus campos al recurso de tu dominio asignado
-export interface Item {
+export interface Tree {
   id: number;
-  name: string;       // Renombra según tu dominio (title, medicationName, etc.)
-  description: string; // Puedes cambiar este campo por otros relevantes
-  price: number;
+  name: string;
+  scientificName: string;
+  family: string;
+  origin: string;
   stock: number;
   createdAt: Date;
 }
 
-// Tipos de respuesta genéricos — no necesitan cambio
+// Tipos de respuesta genéricos
 export interface SingleResponse<T> {
   data: T;
 }

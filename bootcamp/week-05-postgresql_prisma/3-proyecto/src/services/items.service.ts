@@ -15,18 +15,22 @@ export async function findAll(
   opts: FindAllOptions
 ): Promise<PaginatedResponse<Tree>> {
   const { page, limit } = opts;
-  const all = await repo.findAll();
 
-  const start = (page - 1) * limit;
-  const data = all.slice(start, start + limit);
+  const skip = (page - 1) * limit;
+
+  const [data, total] = await Promise.all([
+    repo.findAll(skip, limit),
+    repo.count(),
+  ]);
 
   return {
     data,
-    total: all.length,
+    total,
     page,
     limit,
   };
 }
+
 
 export async function findById(id: number): Promise<Tree> {
   const item = await repo.findById(id);

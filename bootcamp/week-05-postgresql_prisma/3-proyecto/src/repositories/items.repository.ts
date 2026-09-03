@@ -9,8 +9,13 @@ import { Tree } from '../types';
 export type CreateItemRepoDto = Omit<Tree, 'id' | 'createdAt'>;
 export type UpdateItemRepoDto = Partial<CreateItemRepoDto>;
 
-export async function findAll(): Promise<Tree[]> {
+export async function findAll(
+  skip = 0,
+  take = 10
+): Promise<Tree[]> {
   return prisma.tree.findMany({
+    skip,
+    take,
     include: {
       family: true,
     },
@@ -19,6 +24,12 @@ export async function findAll(): Promise<Tree[]> {
     },
   });
 }
+
+export async function count(): Promise<number> {
+  return prisma.tree.count();
+}
+
+
 
 export async function findById(id: number): Promise<Tree | undefined> {
   const item = await prisma.tree.findUnique({

@@ -1,63 +1,70 @@
 // ============================================
 // SEED — Insertar datos de prueba
-// TODO: Adaptar nombres y datos a tu dominio
+// Dominio: Jardín Botánico
 // ============================================
-//
-// REGLA IMPORTANTE: Insertar la entidad SECUNDARIA primero,
-// luego la PRINCIPAL usando los _id de la secundaria.
-//
-// Ejemplo para Biblioteca:
-//   Paso A: Insertar Authors → obtener _id
-//   Paso B: Insertar Books con author: author._id
 
 import 'dotenv/config';
 import { connectDB, disconnectDB } from './lib/mongoose';
-import { Secondary } from './models/secondary.model';
-import { Primary } from './models/primary.model';
+import { Family } from './models/family.model';
+import { Tree } from './models/tree.model';
 
 async function seed(): Promise<void> {
   await connectDB();
 
-  // TODO: Limpiar colecciones (orden inverso: primary primero, luego secondary)
-  await Primary.deleteMany({});
-  await Secondary.deleteMany({});
+  // Limpiar colecciones (orden inverso: principal primero, luego secundaria)
+  await Tree.deleteMany({});
+  await Family.deleteMany({});
   console.log('Collections cleared');
 
-  // TODO: Paso A — Insertar entidades secundarias y capturar _id
-  // Adapta los datos a tu dominio:
-  const [item1, item2, item3] = await Secondary.insertMany([
-    { name: 'Secundaria 1' },  // TODO: reemplazar con datos reales de tu dominio
-    { name: 'Secundaria 2' },
-    { name: 'Secundaria 3' },
+  // Paso A — Familias
+  const [fagaceae, arecaceae, bignoniaceae, meliaceae, fabaceae] = await Family.insertMany([
+    { name: 'Fagaceae' },
+    { name: 'Arecaceae' },
+    { name: 'Bignoniaceae' },
+    { name: 'Meliaceae' },
+    { name: 'Fabaceae' },
   ]);
-  console.log('Secondary entities inserted');
+  console.log('Families inserted');
 
-  // TODO: Paso B — Insertar entidades principales referenciando los _id
-  // Adapta los campos y valores a tu dominio:
-  await Primary.insertMany([
+  // Paso B — Árboles, referenciando el _id de cada familia
+  await Tree.insertMany([
     {
-      name: 'Principal 1',          // TODO: campo real de tu dominio
-      secondary: item1._id,         // TODO: renombrar 'secondary' al campo real
-      // price: 100,                // TODO: añadir campos de tu dominio
+      name: 'Roble',
+      scientificName: 'Quercus humboldtii',
+      origin: 'Colombia',
+      stock: 20,
+      family: fagaceae._id,
     },
     {
-      name: 'Principal 2',
-      secondary: item1._id,
+      name: 'Palma de cera',
+      scientificName: 'Ceroxylon quindiuense',
+      origin: 'Colombia',
+      stock: 15,
+      family: arecaceae._id,
     },
     {
-      name: 'Principal 3',
-      secondary: item2._id,
+      name: 'Guayacán',
+      scientificName: 'Handroanthus chrysanthus',
+      origin: 'América tropical',
+      stock: 10,
+      family: bignoniaceae._id,
     },
     {
-      name: 'Principal 4',
-      secondary: item3._id,
+      name: 'Cedro',
+      scientificName: 'Cedrela odorata',
+      origin: 'América tropical',
+      stock: 12,
+      family: meliaceae._id,
     },
     {
-      name: 'Principal 5',
-      secondary: item2._id,
+      name: 'Samán',
+      scientificName: 'Samanea saman',
+      origin: 'América tropical',
+      stock: 8,
+      family: fabaceae._id,
     },
   ]);
-  console.log('Primary entities inserted');
+  console.log('Trees inserted');
 
   console.log('Seed completed successfully');
   await disconnectDB();

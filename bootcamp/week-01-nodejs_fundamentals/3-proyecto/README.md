@@ -6,24 +6,38 @@ Construir una herramienta de línea de comandos (CLI) que lea datos desde un arc
 
 ---
 
-## 📋 Tu Dominio Asignado
+## 🌱 Tu Dominio Asignado: Jardín Botánico
 
-**El instructor te asignará un dominio específico.** Mientras tanto, el código `starter/` trabaja con un recurso genérico llamado `Item`.
+El recurso principal del proyecto es:
 
-Cuando recibas tu dominio, renombra:
-- `Item` → el recurso principal de tu dominio (ej. `Book`, `Medicine`, `Member`)
-- `items.json` → el archivo de datos de tu dominio (ej. `books.json`)
-- Los campos de `Item` → atributos propios de tu recurso
+**Plant**
 
-### 💡 Ejemplos de Adaptación por Dominio
+La herramienta permite procesar información de plantas de un jardín botánico, aplicando filtros por categoría y generando un reporte con estadísticas del catálogo.
 
-| Dominio | Recurso | Campos |
-|---------|---------|--------|
-| Biblioteca | `Book` | `title`, `author`, `genre`, `available` |
-| Farmacia | `Medicine` | `name`, `category`, `price`, `stock`, `requiresPrescription` |
-| Gimnasio | `Member` | `name`, `plan`, `active`, `monthlyFee` |
-| Restaurante | `Dish` | `name`, `category`, `price`, `available` |
-| Hotel | `Room` | `number`, `type`, `pricePerNight`, `available` |
+Adaptación realizada:
+
+- `Item` → `Plant`
+- `items.json` → `plants.json`
+- Campos adaptados al dominio:
+
+| Campo | Descripción |
+|---|---|
+| `id` | Identificador único de la planta |
+| `name` | Nombre de la planta |
+| `category` | Categoría de la planta |
+| `price` | Precio de la planta |
+| `stock` | Cantidad disponible |
+| `active` | Estado activo o inactivo |
+
+Ejemplos de categorías:
+
+- flor
+- orquidea
+- cactus
+- helecho
+- palmera
+- arbol
+- suculenta
 
 ---
 
@@ -31,40 +45,106 @@ Cuando recibas tu dominio, renombra:
 
 ### 1. Leer datos desde un archivo JSON
 
-La herramienta debe leer el archivo `data/items.json` usando `fs/promises`.
+La herramienta lee el archivo:
+
+```text
+data/plants.json
+```
+
+usando `fs/promises`.
+
+---
 
 ### 2. Mostrar un resumen del catálogo
 
-- Total de ítems
-- Ítems activos vs inactivos
+El programa muestra:
+
+- Total de plantas
+- Plantas activas vs inactivas
 - Precio promedio
-- Ítem más caro y más barato
+- Planta más cara
+- Planta más económica
+- Categorías disponibles
+
+---
 
 ### 3. Filtrar por categoría
 
-Aceptar un argumento de línea de comandos para filtrar por categoría:
+Acepta un argumento de línea de comandos para filtrar plantas por categoría:
+
 ```bash
-pnpm start -- --category electronics
+pnpm dev -- --category flor
 ```
+
+Ejemplo:
+
+```bash
+pnpm dev -- --category cactus
+```
+
+Si la categoría no existe, muestra un aviso con las categorías disponibles.
+
+---
 
 ### 4. Generar reporte en un archivo de salida
 
-Guardar el reporte en `output/report.json` usando `fs/promises.writeFile`.
+El reporte se guarda en:
+
+```text
+output/report.json
+```
+
+utilizando:
+
+- `fs/promises.writeFile`
+- `JSON.stringify`
+
+---
 
 ### 5. Manejo de errores
 
-- Si el archivo `items.json` no existe → mostrar error descriptivo y terminar con `process.exit(1)`
-- Si la categoría no existe → mostrar aviso y listar las categorías disponibles
+El proyecto maneja:
+
+- Archivo `plants.json` inexistente → muestra un error descriptivo y finaliza el proceso.
+- Categoría inexistente → muestra aviso y lista las categorías disponibles.
 
 ---
 
 ## 🛠️ Entregables
 
-1. **Código funcional** que pase `pnpm build` sin errores TypeScript
-2. **README.md actualizado** con tu dominio y descripción del recurso
-3. **Screenshots o logs** de la herramienta ejecutándose con distintos argumentos
-4. **`data/items.json`** adaptado a tu dominio (mínimo 10 registros)
-5. **Reporte generado** en `output/report.json`
+1. **Código funcional** que pasa:
+
+```bash
+pnpm build
+```
+
+sin errores TypeScript.
+
+2. **README.md actualizado** con el dominio Jardín Botánico.
+
+3. **Logs de ejecución** usando diferentes argumentos.
+
+Ejemplos:
+
+```bash
+pnpm dev
+
+pnpm dev -- --category flor
+```
+
+4. Archivo de datos adaptado:
+
+```text
+data/plants.json
+```
+
+con mínimo 10 registros.
+
+5. Reporte generado:
+
+```text
+output/report.json
+```
 
 ---
 
@@ -76,9 +156,22 @@ Guardar el reporte en `output/report.json` usando `fs/promises.writeFile`.
 
 ```bash
 cd 3-proyecto/starter
+
 pnpm install
-pnpm dev              # sin filtro — muestra todos
-pnpm dev -- --category electronics   # con filtro
+
+pnpm dev
+```
+
+Ejecutar con filtro:
+
+```bash
+pnpm dev -- --category flor
+```
+
+Compilar TypeScript:
+
+```bash
+pnpm build
 ```
 
 ---
@@ -87,8 +180,8 @@ pnpm dev -- --category electronics   # con filtro
 
 | Criterio | Peso |
 |----------|------|
-| Lee y parsea `items.json` correctamente | 20% |
-| Calcula el resumen (total, promedio, extremos) | 20% |
+| Lee y parsea `plants.json` correctamente | 20% |
+| Calcula el resumen del catálogo | 20% |
 | Filtra por categoría con `--category` | 20% |
 | Escribe `output/report.json` correctamente | 20% |
 | Manejo de errores (archivo no encontrado, categoría inexistente) | 10% |

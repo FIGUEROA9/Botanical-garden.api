@@ -11,58 +11,130 @@
 
 import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/items.service';
-import { CreateItemDto, UpdateItemDto } from '../types';
+import { CreatePlantDto, UpdatePlantDto, ErrorResponse } from '../types';
 
-export async function getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function getAll(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     // TODO: Paso 1 — extraer page y limit de req.query (con fallbacks 1 y 10)
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
     // TODO: Paso 2 — llamar service.findAll({ page, limit })
+    const result = await service.findAll({ page, limit });
+
     // TODO: Paso 3 — res.json(result)
-    next(new Error('Not implemented'));
+    res.status(200).json(result);
   } catch (err) {
     next(err);
   }
 }
 
-export async function getById(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function getById(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     // TODO: Paso 1 — extraer id de req.params, parsearlo a número
+    const id = Number(req.params.id);
+
     // TODO: Paso 2 — llamar service.findById(id)
+    const plant = await service.findById(id);
+
     // TODO: Paso 3 — si undefined → 404 ErrorResponse; si existe → { data: item }
-    next(new Error('Not implemented'));
+    if (!plant) {
+      const response: ErrorResponse = {
+        error: 'PLANT_NOT_FOUND',
+        message: 'La planta no fue encontrada',
+      };
+
+      res.status(404).json(response);
+      return;
+    }
+
+    res.status(200).json({ data: plant });
   } catch (err) {
     next(err);
   }
 }
 
-export async function create(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function create(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     // TODO: Paso 1 — extraer dto del req.body (tiparlo como CreateItemDto)
+    const dto = req.body as CreatePlantDto;
+
     // TODO: Paso 2 — llamar service.create(dto)
+    const plant = await service.create(dto);
+
     // TODO: Paso 3 — res.status(201).json({ data: item })
-    next(new Error('Not implemented'));
+    res.status(201).json({ data: plant });
   } catch (err) {
     next(err);
   }
 }
 
-export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function update(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     // TODO: Paso 1 — extraer id de params y dto del body (UpdateItemDto)
+    const id = Number(req.params.id);
+    const dto = req.body as UpdatePlantDto;
+
     // TODO: Paso 2 — llamar service.update(id, dto)
+    const updated = await service.update(id, dto);
+
     // TODO: Paso 3 — si undefined → 404; si exitoso → { data: updated }
-    next(new Error('Not implemented'));
+    if (!updated) {
+      const response: ErrorResponse = {
+        error: 'PLANT_NOT_FOUND',
+        message: 'La planta no fue encontrada',
+      };
+
+      res.status(404).json(response);
+      return;
+    }
+
+    res.status(200).json({ data: updated });
   } catch (err) {
     next(err);
   }
 }
 
-export async function remove(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function remove(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     // TODO: Paso 1 — extraer id de params
+    const id = Number(req.params.id);
+
     // TODO: Paso 2 — llamar service.remove(id)
+    const removed = await service.remove(id);
+
     // TODO: Paso 3 — si false → 404; si true → res.status(204).send()
-    next(new Error('Not implemented'));
+    if (!removed) {
+      const response: ErrorResponse = {
+        error: 'PLANT_NOT_FOUND',
+        message: 'La planta no fue encontrada',
+      };
+
+      res.status(404).json(response);
+      return;
+    }
+
+    res.status(204).send();
   } catch (err) {
     next(err);
   }
